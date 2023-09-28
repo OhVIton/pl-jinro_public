@@ -1,0 +1,26 @@
+version: '3'
+services:
+  jinro:
+    build:
+      context: .
+      dockerfile: Jinro.Dockerfile
+    ports:
+      - 3000:3000
+    tty: true
+    command: sh -c 'cd /share/pl-jinro && npm run dev'
+    volumes:
+      - ./:/share/pl-jinro
+    depends_on:
+      - db
+  db:
+    build:
+      context: .
+      dockerfile: Server.Dockerfile
+    ports:
+      - 4000:4000
+      - 9099:9099
+      - 9000:9000
+    tty: true
+    command: sh -c 'cd /share/pl-jinro && firebase emulators:start'
+    volumes:
+      - ./:/share/pl-jinro
